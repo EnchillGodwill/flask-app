@@ -18,9 +18,10 @@ CORS(app)
 def index():
     return jsonify({'message': 'OK'}), HTTPStatus.OK
 
-@app.route("/temperature", methods = ['POST'])
+@app.route("/temperature", methods = ['GET'])
 def record_temperature():
-    temperature = request.json['data']
+    # temperature = request.json['data']
+    temperature = request.args.get("reading")
     db = Database()
     db.record_temperature(temperature)
     
