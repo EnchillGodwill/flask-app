@@ -1,14 +1,12 @@
 import pymysql.cursors
 
-from application.database
-import db 
-from application.server  
-import app
+#from application.database import db 
+#from application.server  import app
 
-with app.test_request_context():
-	db.init_app(app)
-	db.create_all()
-
+#with app.test_request_context():
+#	db.init_app(app)
+#	db.create_all()
+#
 
 def connect_obj():
     return pymysql.connect(host='localhost',

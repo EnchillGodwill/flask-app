@@ -4,8 +4,10 @@ from http import HTTPStatus
 import serial, datetime
 from db import store_temp, get_temp_data
 
-import plotly.express as px
-import pandas as pd
+from database import Database
+
+#import plotly.express as px
+#import pandas as pd
 
 
 from flask_cors import CORS 
@@ -15,6 +17,15 @@ CORS(app)
 @app.route("/")
 def index():
     return jsonify({'message': 'OK'}), HTTPStatus.OK
+
+@app.route("/temperature", methods = ['POST'])
+def record_temperature():
+    temperature = request.json['data']
+    db = Database()
+    db.record_temperature(temperature)
+    
+    return jsonify({'message': 'OK'}), HTTPStatus.OK
+
 
 @app.route("/post_temp", methods=['POST'])
 def post_temp():
@@ -35,9 +46,9 @@ def post_temp():
 
 @app.route("/temp_records")
 def temp_recs():
-    df = pd.read_csv('temperature_data.csv', names=['reading', 'createdAt'])
+    # df = pd.read_csv('temperature_data.csv', names=['reading', 'createdAt'])
     #df = pd.DataFrame(records, columns=['reading', 'createdAt'])
 
-    fig = px.line(df, y='createdAt', x='reading', title='Temperature Data')
-    fig.write_html("templates/temp_recs.html")
+    #fig = px.line(df, y='createdAt', x='reading', title='Temperature Data')
+    #fig.write_html("templates/temp_recs.html")
     return render_template("temp_recs.html")
