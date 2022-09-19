@@ -1,55 +1,55 @@
-from flask import Flask, request, jsonify, render_template, url_for
+import datetime
 from http import HTTPStatus
 
-import serial, datetime
-from db import store_temp, get_temp_data
+from flask import jsonify, render_template, request
+from flask_cors import CORS
 
 from database import Database
+from models.model import Reading
 
-#import plotly.express as px
-#import pandas as pd
+from config import app, db
 
+CORS(app)
 
-from flask_cors import CORS 
-app = Flask(__name__)
-CORS(app) 
 
 @app.route("/")
 def index():
     return jsonify({'message': 'OK'}), HTTPStatus.OK
 
-@app.route("/temperature", methods = ['GET'])
+
+@app.route("/temperature", methods=['GET'])
 def record_temperature():
-    # temperature = request.json['data']
     temperature = request.args.get("reading")
     db = Database()
     db.record_temperature(temperature)
-    
+
     return jsonify({'message': 'OK'}), HTTPStatus.OK
 
 
 @app.route("/post_temp", methods=['POST'])
 def post_temp():
-    json_ = request.json
-    data = json_['data']
+    data = request.json
+    created_at = datetime.datetime.now()
+    cal_volt, cal_conc, nit_volt, nit_conc, temp = data['cal_volt'], data[
+        'cal_conc'], data['nit_volt'], data['nit_conc'], data.get("temp")
 
-    param = 'Temperature'
-    reading = data
-    created_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    #store_temp(param, reading, created_at)
-
-    with open('temperature_data.csv', 'a+') as f:
-        f.write(f"{created_at}, {reading}\n")
-
+    reading = Reading(cal_conc=cal_conc,
+                      cal_volt=cal_volt,
+                      nit_volt=nit_volt,
+                      nit_conc=nit_conc,
+                      temperature=temp,
+                      created_at=created_at)
+    db.session.add(reading)
+    db.session.commit()
     return jsonify({'message': 'OK'}), HTTPStatus.OK
 
 
-@app.route("/temp_records")
+@app.route("/readings")
 def temp_recs():
-    # df = pd.read_csv('temperature_data.csv', names=['reading', 'createdAt'])
-    #df = pd.DataFrame(records, columns=['reading', 'createdAt'])
+    readings = Reading.query.filter_by().order_by(-Reading.id).all()
+    payload = {"readings": readings}
+    return render_template("readings.html", **payload)
 
-    #fig = px.line(df, y='createdAt', x='reading', title='Temperature Data')
-    #fig.write_html("templates/temp_recs.html")
-    return render_template("temp_recs.html")
+
+if __name__ == "__main__":
+    app.run()
