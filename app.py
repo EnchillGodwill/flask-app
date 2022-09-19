@@ -7,7 +7,9 @@ from flask_cors import CORS
 from database import Database
 from models.model import Reading
 
-from config import app, db
+from config import app as flask_app, db
+
+app = flask_app
 
 CORS(app)
 
