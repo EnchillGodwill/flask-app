@@ -40,11 +40,12 @@ def logout():
 def send_data():
     data = request.args
     created_at = datetime.datetime.now()
-    kind, value, meta_data = data.get("kind"), data.get("value"), data.get(
-        "meta_data")
+    kind, value, device, meta_data = data.get("kind"), data.get(
+        "value"), data.get("device"), data.get("meta_data")
 
     reading = Reading(kind=kind,
                       value=value,
+                      device=device,
                       meta_data=meta_data,
                       created_at=created_at)
     db.session.add(reading)

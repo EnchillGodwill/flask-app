@@ -11,7 +11,10 @@ server_address = "http://localhost:5000"
 ser = serial.Serial(
     # Serial Port to read the data from
     #    port='/dev/ttyUSB0',
-    port='/dev/cu.usbserial-AL032CWB',
+    # port='/dev/cu.usbserial-AL032CWB',
+    # port='/dev/cu.usbserial-AL032D7N',
+    # port='/dev/cu.usbserial-AL032BX0',
+    port='/dev/cu.usbserial-AL032CWA',
     #Rate at which the information is shared to the communication channel
     baudrate=115200,
 
