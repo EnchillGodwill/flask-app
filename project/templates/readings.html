@@ -26,82 +26,40 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 p-2">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="my-3">CONCENTRATION</h3>
-                </div>
-                <div class="card-body  p-2">
-                    <table id="flat-table" class="table data-table">
-                        <thead>
-                            <tr>
-                                <th>Created At</th>
-                                <th>Calcium Voltage</th>
-                                <th>Calcium Concentration</th>
-                                <th>Nitrate Voltage</th>
-                                <th>Nitrate Concentration</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for reading in readings %}
-                            <tr>
-                                <td>
-                                    {{reading.created_at.strftime('%Y-%m-%d %H:%M:%S %p')}}
-                                </td>
-                                <td>
-                                    {{reading.cal_volt}}
-                                </td>
-                                <td> {{reading.cal_conc}}
 
-                                </td>
-                                <td>
-                                    {{reading.nit_volt}}
-                                </td>
-                                <td>
-                                    {{reading.nit_conc}}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <div class="card-body col-md-8 mx-auto my-4">
+            <table id="flat-table" class="table data-table">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>RECORDED AT</th>
+                        <th>KIND</th>
+                        <th>VALUE</th>
+                        <th>META DATA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reading in readings %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>
+                            {{reading.created_at.strftime('%Y-%m-%d %H:%M:%S %p')}}
+                        </td>
+                        <td>
+                            {{reading.kind}}
+                        </td>
+                        <td> {{reading.value}}
 
-
-        <div class="col-md-6 p-2">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="my-3">TEMPERATURE</h3>
-                </div>
-                <div class="card-body  p-2">
-                    <table id="flat-table" class="table data-table">
-                        <thead>
-                            <tr>
-                                <th>Created At</th>
-                                <th>Temperature</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for reading in temperature_readings %}
-                            <tr>
-                                <td>
-                                    {{reading.created_at.strftime('%Y-%m-%d %H:%M:%S %p')}}
-                                </td>
-                                <td>
-                                    {{reading.value}}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        </td>
+                        <td>
+                            {{reading.meta_data}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

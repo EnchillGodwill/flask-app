@@ -4,7 +4,7 @@ from http import HTTPStatus
 from flask import jsonify, redirect, render_template, request, url_for, session
 from flask_cors import CORS
 
-from models.model import Reading, TemperatureReading
+from models.model import Reading
 
 from config import app as flask_app, db
 import os
@@ -26,7 +26,7 @@ def login():
             error = 'Invalid Credentials. Please try again.'
         else:
             session['user'] = {"username": request.form['username']}
-            return redirect(url_for('readings'))
+            return redirect(url_for('data'))
     return render_template('login.html', error=error)
 
 
@@ -36,29 +36,16 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route("/post-temperature", methods=['GET'])
-def post_temperature():
-    data = request.json
-    temp = data['temperature']
-    temperature = TemperatureReading(temperature=temp,
-                                     created_at=datetime.datetime.now())
-    db.session.add(temperature)
-    db.session.commit()
-    return jsonify({'message': 'OK'}), HTTPStatus.OK
-
-
-@app.route("/post-concentration", methods=['POST'])
-def post_concentration():
-    data = request.json
+@app.route("/send-data", methods=['GET'])
+def send_data():
+    data = request.args
     created_at = datetime.datetime.now()
-    cal_volt, cal_conc, nit_volt, nit_conc, temp = data['cal_volt'], data[
-        'cal_conc'], data['nit_volt'], data['nit_conc'], data.get("temp")
+    kind, value, meta_data = data.get("kind"), data.get("value"), data.get(
+        "meta_data")
 
-    reading = Reading(cal_conc=cal_conc,
-                      cal_volt=cal_volt,
-                      nit_volt=nit_volt,
-                      nit_conc=nit_conc,
-                      temperature=temp,
+    reading = Reading(kind=kind,
+                      value=value,
+                      meta_data=meta_data,
                       created_at=created_at)
     db.session.add(reading)
     db.session.commit()
@@ -66,21 +53,18 @@ def post_concentration():
 
 
 @app.route("/")
-def readings():
+def data():
     # Authenticate
     if not session.get(
             'user') or session['user'].get('username') != APP_USERNAME:
         return redirect(url_for('login'))
 
     readings = Reading.query.filter_by().order_by(-Reading.id).all()
-    temperature_readings = TemperatureReading.query.filter_by().order_by(
-        -TemperatureReading.id).all()
 
     username = session['user'].get('username')
     payload = {
         "readings": readings,
         "username": username,
-        "temperature_readings": temperature_readings,
     }
     return render_template("readings.html", **payload)
 

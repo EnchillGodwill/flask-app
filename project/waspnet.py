@@ -7,6 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 server_address = "https://enchill.pythonanywhere.com"
+server_address = "http://localhost:5000"
 ser = serial.Serial(
     # Serial Port to read the data from
     #    port='/dev/ttyUSB0',
@@ -25,23 +26,21 @@ while True:
         # Converting Byte Strings into unicode strings
         device_reading = line.decode('utf-8')
 
-        readings = device_reading.replace("\t", "").replace(" ", "").replace(
-            "\r", "").replace("\n", "").split("|")
-        if len(readings) == 4:
-            cal_volt, cal_conc, nit_volt, nit_conc = readings
+        # readings = device_reading.replace("\t", "").replace(" ", "").replace(
+        #     "\r", "").replace("\n", "").split("|")
 
-            # Sending the data to the server
-            payload = {
-                'cal_volt': cal_volt,
-                'cal_conc': cal_conc,
-                'nit_volt': nit_volt,
-                'nit_conc': nit_conc,
-                "temp": 0
-            }
-            try:
-                end_point = f'{server_address}/post_temp'
-                print(f"Posting to : ", end_point)
-                r = requests.post(end_point, json=payload)
-                print("Status: ", r.status_code)
-            except Exception as e:
-                print("Failed to send data to server")
+        print("device_reading", device_reading)
+
+        # Sending the data to the server
+        payload = {
+            'kind': "temperature",
+            'value': 44.2,
+            'meta_data': "Location: Akosombo",
+        }
+        try:
+            end_point = f'{server_address}/send-data'
+            print(f"Posting to : ", end_point)
+            r = requests.get(end_point, params=payload)
+            print("Status: ", r.status_code)
+        except Exception as e:
+            print("Failed to send data to server")
