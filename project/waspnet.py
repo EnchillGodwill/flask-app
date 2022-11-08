@@ -37,10 +37,10 @@ while True:
             'value': 44.2,
             'meta_data': "Location: Akosombo",
         }
-        try:
-            end_point = f'{server_address}/send-data'
-            print(f"Posting to : ", end_point)
-            r = requests.get(end_point, params=payload)
-            print("Status: ", r.status_code)
-        except Exception as e:
-            print("Failed to send data to server")
+        # try:
+        #     end_point = f'{server_address}/send-data'
+        #     print(f"Posting to : ", end_point)
+        #     r = requests.get(end_point, params=payload)
+        #     print("Status: ", r.status_code)
+        # except Exception as e:
+        #     print("Failed to send data to server")

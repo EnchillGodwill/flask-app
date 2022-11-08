@@ -1,13 +1,13 @@
 import datetime
+import os
 from http import HTTPStatus
 
-from flask import jsonify, redirect, render_template, request, url_for, session
+from config import app as flask_app
+from config import db
+from flask import jsonify, redirect, render_template, request, session, url_for
 from flask_cors import CORS
-
+from flask_paginate import Pagination, get_page_parameter
 from models.model import Reading
-
-from config import app as flask_app, db
-import os
 
 app = flask_app
 
@@ -26,7 +26,7 @@ def login():
             error = 'Invalid Credentials. Please try again.'
         else:
             session['user'] = {"username": request.form['username']}
-            return redirect(url_for('data'))
+            return redirect(url_for('readings'))
     return render_template('login.html', error=error)
 
 
@@ -53,18 +53,31 @@ def send_data():
 
 
 @app.route("/")
-def data():
+def readings():
     # Authenticate
     if not session.get(
             'user') or session['user'].get('username') != APP_USERNAME:
         return redirect(url_for('login'))
 
-    readings = Reading.query.filter_by().order_by(-Reading.id).all()
+    # Searching
+    query = request.args.get('query')
+    ROWS_PER_PAGE = 5
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    readings = Reading.query.filter_by()
+    if query:
+        readings = readings.filter(Reading.kind.like(f"%{query}%"))
+        readings = readings.union(
+            Reading.query.filter(Reading.meta_data.like(f"%{query}%")))
+
+    readings = readings.order_by(-Reading.id).paginate(page=page,
+                                                       per_page=ROWS_PER_PAGE)
 
     username = session['user'].get('username')
     payload = {
         "readings": readings,
         "username": username,
+        "query": query,
     }
     return render_template("readings.html", **payload)
 

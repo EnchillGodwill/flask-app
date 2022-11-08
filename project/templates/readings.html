@@ -28,6 +28,52 @@
         </div>
 
         <div class="card-body col-md-8 mx-auto my-4">
+
+            <div class="col-12 my-5 d-flex justify-content-between">
+                <form action="" method="get">
+                    <div class="form-group d-flex">
+                        <input class="form-control" type="search" name="query" value="{{query}}"
+                            placeholder="Search kind or meta data here.">
+                        <button class="btn btn-light">Search</button>
+                    </div>
+                </form>
+                <div>
+                    <!-- Pagination Links-->
+                    <div class="text-right">
+                        <a href="{{ url_for('readings', page=readings.prev_num) }}?query={{query}}"
+                            class="btn btn-outline-dark {% if readings.page == 1 %}disabled{% endif %}">
+                            &laquo;
+                        </a>
+                        <!-- Loop through the number of pages to display a link for each-->
+                        {% for page_num in readings.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                        {% if page_num %}
+                        <!-- Check for the active page and set the link to "Active"-->
+                        {% if readings.page == page_num %}
+                        <a href="{{ url_for('readings', page=page_num) }}?query={{query}}" class="btn btn-dark">
+                            {{ page_num }}
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('readings', page=page_num) }}?query={{query}}" class="btn btn-outline-dark">
+                            {{ page_num }}
+                        </a>
+                        {% endif %}
+                        {% else %}
+                        ...
+                        {% endif %}
+                        {% endfor %}
+                        <a href="{{ url_for('readings', page=readings.next_num) }}?query={{query}}"
+                            class="btn btn-outline-dark {% if readings.page == readings.pages %}disabled{% endif %}">
+                            &raquo;
+                        </a>
+                    </div>
+                    <p class="text-right mt-3">
+                        Showing page {{ readings.page }} of {{ readings.pages }}
+                    </p>
+                </div>
+            </div>
+            <hr>
+
+
             <table id="flat-table" class="table data-table">
                 <thead>
                     <tr>
@@ -39,7 +85,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for reading in readings %}
+                    {% for reading in readings.items %}
                     <tr>
                         <td>{{loop.index}}</td>
                         <td>
