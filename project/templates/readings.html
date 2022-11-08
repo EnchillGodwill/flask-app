@@ -81,6 +81,7 @@
                         <th>RECORDED AT</th>
                         <th>KIND</th>
                         <th>VALUE</th>
+                        <th>DEVICE</th>
                         <th>META DATA</th>
                     </tr>
                 </thead>
@@ -95,7 +96,9 @@
                             {{reading.kind}}
                         </td>
                         <td> {{reading.value}}
-
+                        </td>
+                        <td>
+                            {{reading.device}}
                         </td>
                         <td>
                             {{reading.meta_data}}
