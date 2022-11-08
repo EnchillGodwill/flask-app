@@ -18,8 +18,8 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/login")
-def login():
+@app.route("/login-post", methods=["POST"])
+def login_post():
     return render_template("login.html")
 
 
