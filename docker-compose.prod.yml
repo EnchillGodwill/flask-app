@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: wasp_web
+    build: ./
+    command: sh -c 'gunicorn app:app --bind 0.0.0.0:8000'
+    restart: always
+    volumes:
+      - static_volume:/home/wasp_web/app/static
+    expose:
+      - 8000
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+  db:
+    container_name: wasp_db
+    image: postgres:13.0-alpine
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.prod.db
+    ports:
+      - 1234:5432
+
+  nginx:
+    container_name: wasp_nginx
+    build: ./nginx
+    restart: always
+    volumes:
+      - static_volume:/home/wasp_web/app/static
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    ports:
+      - 81:80
+      - 4432:4432
+    depends_on:
+      - web
+  certbot:
+    container_name: wasp_certbot
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
+volumes:
+  postgres_data: null
+  static_volume: null

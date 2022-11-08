@@ -4,7 +4,6 @@ from http import HTTPStatus
 from flask import jsonify, render_template, request
 from flask_cors import CORS
 
-from database import Database
 from models.model import Reading
 
 from config import app as flask_app, db
@@ -21,9 +20,9 @@ def index():
 
 @app.route("/temperature", methods=['GET'])
 def record_temperature():
-    temperature = request.args.get("reading")
-    db = Database()
-    db.record_temperature(temperature)
+    # temperature = request.args.get("reading")
+    # db = Database()
+    # db.record_temperature(temperature)
 
     return jsonify({'message': 'OK'}), HTTPStatus.OK
 

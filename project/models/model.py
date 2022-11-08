@@ -9,10 +9,22 @@ class Reading(db.Model):
     cal_conc = db.Column(db.Float, nullable=True)
     nit_volt = db.Column(db.Float, nullable=True)
     nit_conc = db.Column(db.Float, nullable=True)
-    temperature = db.Column(db.Float, nullable=True)
 
     def __repr__(self):
         return '<Reading %r>' % self.created_at
+
+    def __str__(self):
+        return self.created_at
+
+
+class TemperatureReading(db.Model):
+    __tablename__ = 'temperature_readings'
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, nullable=False)
+    temperature = db.Column(db.Float, nullable=True)
+
+    def __repr__(self):
+        return '<TemperatureReading %r>' % self.created_at
 
     def __str__(self):
         return self.created_at
