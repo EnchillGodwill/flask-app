@@ -4,9 +4,9 @@ import os
 
 app = Flask(__name__)
 
-POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
-POSTGRES_PORT = os.environ.get("POSTGRES_PORT", "1234")
-POSTGRES_URL = f"{POSTGRES_HOST}:{POSTGRES_PORT}"
+SQL_HOST = os.environ.get("SQL_HOST", "localhost")
+SQL_PORT = os.environ.get("SQL_PORT", "1234")
+POSTGRES_URL = f"{SQL_HOST}:{SQL_PORT}"
 POSTGRES_USER = os.environ.get("POSTGRES_USER", "wasp_user")
 POSTGRES_PW = os.environ.get("POSTGRES_PW", "wasp_!db_password")
 POSTGRES_DB = os.environ.get("POSTGRES_DB", "wasp_db")
