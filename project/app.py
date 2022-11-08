@@ -54,7 +54,7 @@ def post_concentration():
 def temp_recs():
     readings = Reading.query.filter_by().order_by(-Reading.id).all()
     temperature_readings = TemperatureReading.query.filter_by().order_by(
-        -Reading.id).all()
+        -TemperatureReading.id).all()
     payload = {
         "readings": readings,
         "temperature_readings": temperature_readings,

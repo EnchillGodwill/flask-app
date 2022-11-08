@@ -21,7 +21,7 @@ class TemperatureReading(db.Model):
     __tablename__ = 'temperature_readings'
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, nullable=False)
-    value = db.Column(db.Float, nullable=True)
+    temperature = db.Column(db.Float, nullable=True)
 
     def __repr__(self):
         return '<TemperatureReading %r>' % self.created_at
