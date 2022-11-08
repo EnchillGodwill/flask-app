@@ -6,7 +6,7 @@ from config import app as flask_app
 from config import db
 from flask import jsonify, redirect, render_template, request, session, url_for
 from flask_cors import CORS
-from flask_paginate import Pagination, get_page_parameter
+from flask_paginate import get_page_parameter
 from models.model import Reading
 
 app = flask_app
@@ -60,8 +60,8 @@ def readings():
         return redirect(url_for('login'))
 
     # Searching
-    query = request.args.get('query')
-    ROWS_PER_PAGE = 5
+    query = request.args.get('query', "")
+    ROWS_PER_PAGE = 400
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     readings = Reading.query.filter_by()
