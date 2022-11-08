@@ -132,7 +132,8 @@
         transform: scale(0.95);
     }
 
-    input[type=text] {
+    input[type=text],
+    input[type=password] {
         background-color: #f6f6f6;
         border: none;
         color: #0d0d0d;
@@ -308,19 +309,24 @@
 
 <body>
 
-    <div class="wrapper fadeInDown">
+    <div class="wrapper">
         <div id="formContent">
             <!-- Tabs Titles -->
 
             <!-- Icon -->
             <div class="fadeIn first">
-                <img class="my-5" src="{{ url_for('static', filename='images/logo.jpeg') }}" id="icon" alt="User Icon" style="height: 100px; width: 70px;" />
+                <img class="my-5" src="{{ url_for('static', filename='images/logo.jpeg') }}" id="icon" alt="User Icon"
+                    style="height: 100px; width: 70px;" />
             </div>
 
             <!-- Login Form -->
-            <form action="/logo-post" method="POST">
-                <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-                <input type="password" id="password" class="fadeIn third" name="login" placeholder="password">
+            <form method="POST">
+                {% if errro %}
+                <p class="text-danger my-3">{{error}}</p>
+                {% endif %}
+
+                <input type="text" id="login" class="fadeIn second" name="username" placeholder="username">
+                <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
                 <input type="submit" class="fadeIn fourth" value="Log In">
             </form>
 

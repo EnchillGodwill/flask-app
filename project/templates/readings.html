@@ -15,22 +15,16 @@
 
 </head>
 
-<style>
-    .flat-table {
-        display: block;
-        font-family: sans-serif;
-        -webkit-font-smoothing: antialiased;
-        font-size: 115%;
-        overflow: auto;
-        width: auto;
-    }
-</style>
-
-
 <body>
     <div class="my-3">
         <div class="card-header">
-            <h3 class="my-3">WASP PROJECT</h3>
+            <div class="d-flex justify-content-between">
+                <h3 class="my-3">WASP PROJECT</h3>
+                <div class="d-flex justify-content-end align-items-center">
+                    <p class="text my-1 mx-2">Hi {{username}}!</p>
+                    <a href="/logout" class="btn btn-light">Logout</a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">

@@ -18,4 +18,11 @@ if DATABASE == "postgres":
     app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+
+# Configure session
+app.secret_key = 'super secret key'
+app.config['SESSION_TYPE'] = 'filesystem'
+
+app.debug = True
+
 db = SQLAlchemy(app)
